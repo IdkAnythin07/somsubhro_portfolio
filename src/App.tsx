@@ -92,6 +92,7 @@ export const App: React.FC = () => {
           id="about"
           title="ABOUT_ME.exe"
           headerColor="yellow"
+          widthClass="w-full max-w-4xl"
           icon={<span className="text-sm">⚡</span>}
           isOpen={windowStates.about.isOpen}
           isMinimized={windowStates.about.isMinimized}
@@ -101,69 +102,150 @@ export const App: React.FC = () => {
           onMaximizeChange={(max) => updateWindowState('about', { isMaximized: max })}
           onClose={() => updateWindowState('about', { isOpen: false })}
         >
-          <div className="space-y-6">
-            {/* Profile Card with tactile hover */}
-            <div className="bg-white border-[3px] border-black p-4 sm:p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-[#FFE600] border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-mono font-black text-2xl select-none">
-                  ⚡
+          {/* Two-column Hero Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+            
+            {/* Left Column: High-contrast framed visual card / avatar placeholder */}
+            <div className="lg:col-span-5 w-full flex flex-col items-center">
+              <div className="w-full bg-white border-[3px] border-black p-3.5 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col gap-3">
+                
+                {/* Visual Viewfinder Header with Filmstrip metadata */}
+                <div className="flex items-center justify-between border-b-2 border-black pb-1.5 font-mono text-[10px] font-bold text-gray-700">
+                  <span className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block" />
+                    <span>REC // 00:00:01:00</span>
+                  </span>
+                  <span>1080 x 1350</span>
                 </div>
+
+                {/* Framed Graphic Artwork / Visual Placeholder with Viewfinder Corners */}
+                <div className="relative w-full aspect-[4/5] bg-[#F4F4F0] border-2 border-black overflow-hidden flex flex-col items-center justify-center p-4 select-none">
+                  
+                  {/* Subtle Grid Canvas Background inside frame */}
+                  <div className="absolute inset-0 bg-grid-canvas opacity-70 pointer-events-none" />
+
+                  {/* Viewfinder crosshairs & crop marks */}
+                  <div className="absolute top-2 left-2 font-mono text-xs font-bold text-black pointer-events-none">┌</div>
+                  <div className="absolute top-2 right-2 font-mono text-xs font-bold text-black pointer-events-none">┐</div>
+                  <div className="absolute bottom-2 left-2 font-mono text-xs font-bold text-black pointer-events-none">└</div>
+                  <div className="absolute bottom-2 right-2 font-mono text-xs font-bold text-black pointer-events-none">┘</div>
+
+                  {/* Center Illustration: Stylized Geometric Animator Silhouette / Reel */}
+                  <div className="relative z-10 flex flex-col items-center text-center space-y-3">
+                    <div className="relative">
+                      {/* Stylized Film Reel / Creative Monogram Frame */}
+                      <div className="w-24 h-24 sm:w-28 sm:h-28 bg-[#FFE600] border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-display font-black text-4xl text-black">
+                        SC
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 bg-[#FF499E] text-black font-mono font-extrabold text-[10px] px-1.5 py-0.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                        KEYFRAME
+                      </div>
+                    </div>
+
+                    <div className="space-y-0.5">
+                      <div className="font-mono text-xs font-extrabold uppercase tracking-wider text-black">
+                        Somsubhra Chakraborty
+                      </div>
+                      <div className="font-mono text-[10px] text-gray-600 font-semibold">
+                        Creative Canvas &bull; Adobe PS / AI
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Film Perforations simulation */}
+                  <div className="absolute top-0 bottom-0 left-1 w-2 flex flex-col justify-between py-2 pointer-events-none">
+                    {[...Array(6)].map((_, i) => (
+                      <span key={i} className="w-1.5 h-2 bg-black border border-black inline-block" />
+                    ))}
+                  </div>
+                  <div className="absolute top-0 bottom-0 right-1 w-2 flex flex-col justify-between py-2 pointer-events-none">
+                    {[...Array(6)].map((_, i) => (
+                      <span key={i} className="w-1.5 h-2 bg-black border border-black inline-block" />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Stylized "FRAME 01 / 24 FPS" Badge */}
+                <div className="flex items-center justify-between bg-[#FFE600] border-2 border-black px-2.5 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <span className="font-mono font-black text-xs uppercase tracking-wider text-black flex items-center gap-1.5">
+                    <span>🎬</span>
+                    <span>FRAME 01 / 24 FPS</span>
+                  </span>
+                  <span className="font-mono text-[10px] font-extrabold bg-black text-white px-1.5 py-0.5">
+                    PROD. READY
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Name, Highlight Badge, Bio, and Tactile CTA */}
+            <div className="lg:col-span-7 flex flex-col justify-between space-y-5">
+              
+              {/* Header Title Section */}
+              <div className="space-y-2.5">
+                {/* Oversized Bold Display Name */}
+                <h1 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-black uppercase tracking-tight leading-[1.08]">
+                  Somsubhra Chakraborty
+                </h1>
+
+                {/* Hot Pink Highlight Badge */}
                 <div>
-                  <h2 className="font-display font-bold text-xl sm:text-2xl uppercase tracking-tight text-black">
-                    Somsubhra
-                  </h2>
-                  <p className="font-mono text-xs sm:text-sm text-gray-800 font-bold">
-                    Creative Technologist & Full-Stack Engineer
-                  </p>
+                  <span className="inline-block bg-[#FF499E] text-black border-2 border-black font-mono font-bold text-xs sm:text-sm px-3 py-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] uppercase tracking-wide">
+                    Animator, Visual Designer & Storyteller
+                  </span>
                 </div>
               </div>
 
-              {/* Tactile Button */}
-              <button
-                type="button"
-                onClick={() => alert("Resume downloaded: somsubhra_cv_2026.pdf")}
-                className="
-                  inline-flex items-center gap-2 px-4 py-2
-                  bg-[#FFE600] text-black
-                  border-[3px] border-black
-                  font-mono font-bold text-xs uppercase tracking-wider
-                  shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-                  hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]
-                  active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-                  transition-all duration-75 cursor-pointer
-                "
-              >
-                <FileText size={14} />
-                <span>Download CV</span>
-              </button>
-            </div>
+              {/* Exact Bio rendered with clean, high readability */}
+              <div className="bg-white border-[2.5px] border-black p-4 sm:p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-3 font-sans">
+                <p className="text-sm sm:text-base leading-relaxed text-gray-900 font-medium">
+                  Hello, I am Somsubhra Chakraborty, an animator, visual designer and storyteller passionate about bringing imagination to life one frame at a time. Right now, I spend most of my creative hours diving deep into the world of animation, improving my craft in Adobe Photoshop and Illustrator, and experimenting with different visual styles, textures, and compositions.
+                </p>
+                <p className="text-sm sm:text-base leading-relaxed text-gray-900 font-medium">
+                  Whether I am building posters or studying how movement gives a character emotion, I love understanding how every small detail comes together to tell a bigger story. My goal is to grow into an animator who creates visuals that do not just look good but genuinely make people feel something.
+                </p>
+              </div>
 
-            {/* Bio Description */}
-            <p className="text-sm leading-relaxed font-medium text-gray-900">
-              Building at the intersection of robust web systems, graphic programming, and expressive user experiences. Focused on snappy micro-interactions, high-speed architectures, and unapologetic Neobrutalist design.
-            </p>
+              {/* Action Area: Tactile Primary CTA Button */}
+              <div className="pt-1 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => handleRestoreAndScroll('lab')}
+                  className="
+                    inline-flex items-center justify-center gap-2 px-6 py-3
+                    bg-[#FFE600] text-black
+                    border-[3px] border-black
+                    font-mono font-black text-xs sm:text-sm uppercase tracking-wider
+                    shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+                    hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]
+                    active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
+                    transition-all duration-75 cursor-pointer
+                  "
+                >
+                  <span>EXPLORE MY CRAFT ↓</span>
+                </button>
 
-            {/* Core Capability Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {[
-                { title: 'FRONTEND ARCHITECTURE', desc: 'React, TypeScript, Next.js, WebGL & Canvas systems', color: 'bg-white' },
-                { title: 'CREATIVE DESIGN', desc: 'Neobrutalism, motion mechanics, bold identity & design systems', color: 'bg-[#FFE600]' },
-                { title: 'BACKEND & CLOUD', desc: 'Node.js, Go, PostgreSQL, Edge caching & real-time streams', color: 'bg-[#00F0FF]' },
-              ].map((card) => (
-                <div
-                  key={card.title}
-                  className={`
-                    p-3.5 border-2 border-black
+                <button
+                  type="button"
+                  onClick={() => handleRestoreAndScroll('offline')}
+                  className="
+                    inline-flex items-center justify-center gap-2 px-4 py-3
+                    bg-white text-black
+                    border-2 border-black
+                    font-mono font-bold text-xs uppercase tracking-wider
                     shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
                     hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]
-                    transition-all duration-100 ${card.color}
-                  `}
+                    active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
+                    transition-all duration-75 cursor-pointer
+                  "
                 >
-                  <div className="font-mono text-xs font-black uppercase text-black">{card.title}</div>
-                  <div className="font-mono text-[11px] text-gray-800 font-semibold mt-1 leading-normal">{card.desc}</div>
-                </div>
-              ))}
+                  <Mail size={14} />
+                  <span>Get In Touch</span>
+                </button>
+              </div>
+
             </div>
+
           </div>
         </RetroWindow>
 
