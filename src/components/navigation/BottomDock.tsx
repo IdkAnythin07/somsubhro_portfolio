@@ -34,15 +34,15 @@ export const BottomDock: React.FC<BottomDockProps> = ({ windows, onRestoreAndScr
       key: 'lab',
       title: 'THE_CREATIVE_LAB.psd',
       icon: '🎨',
-      accentBg: 'bg-[#FF499E]',
-      accentHover: 'hover:bg-[#FF6DB2]',
+      accentBg: 'bg-[#00F0FF]',
+      accentHover: 'hover:bg-[#4DF4FF]',
     },
     {
       key: 'offline',
       title: 'OFFLINE_MODE.sav',
       icon: '💾',
-      accentBg: 'bg-[#00F0FF]',
-      accentHover: 'hover:bg-[#4DF4FF]',
+      accentBg: 'bg-[#FF499E]',
+      accentHover: 'hover:bg-[#FF6DB2]',
     },
   ];
 

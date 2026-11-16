@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { RetroWindow } from './components/RetroWindow';
 import { TopStatusBar } from './components/navigation/TopStatusBar';
 import { BottomDock, WindowDockState } from './components/navigation/BottomDock';
+import { CreativeLabWindow } from './components/windows/CreativeLabWindow';
 import {
   ExternalLink,
   Github,
@@ -249,11 +250,12 @@ export const App: React.FC = () => {
           </div>
         </RetroWindow>
 
-        {/* 2. THE_CREATIVE_LAB.psd (Hot Pink Header) */}
+        {/* 2. THE_CREATIVE_LAB.psd (Electric Cyan Header) */}
         <RetroWindow
           id="lab"
           title="THE_CREATIVE_LAB.psd"
-          headerColor="pink"
+          headerColor="cyan"
+          widthClass="w-full max-w-4xl"
           icon={<span className="text-sm">🎨</span>}
           isOpen={windowStates.lab.isOpen}
           isMinimized={windowStates.lab.isMinimized}
@@ -263,84 +265,15 @@ export const App: React.FC = () => {
           onMaximizeChange={(max) => updateWindowState('lab', { isMaximized: max })}
           onClose={() => updateWindowState('lab', { isOpen: false })}
         >
-          <div className="space-y-5">
-            <div className="flex items-center justify-between border-b-2 border-black pb-2">
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-black flex items-center gap-1.5">
-                <Palette size={14} className="text-[#FF499E]" />
-                Experimental Prototypes & Visual Shaders
-              </span>
-              <span className="font-mono text-[10px] bg-black text-[#FF499E] px-2 py-0.5 border border-black font-extrabold uppercase">
-                4 ARTIFACTS
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Lab Experiment 1 */}
-              <div className="bg-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between border-b-2 border-black pb-1.5">
-                    <span className="font-mono font-bold text-sm uppercase">Chromashift Canvas</span>
-                    <span className="font-mono text-[10px] font-bold bg-[#FFE600] px-1.5 py-0.5 border border-black">GLSL</span>
-                  </div>
-                  <p className="text-xs text-gray-800 leading-relaxed font-mono">
-                    Real-time procedural dithering and CRT chromatic aberration shader running at 60 FPS in WebGL2.
-                  </p>
-                </div>
-                <div className="pt-4 flex items-center justify-between">
-                  <span className="font-mono text-[10px] font-bold text-gray-600">v1.4 // WebGL</span>
-                  <button
-                    type="button"
-                    onClick={() => alert("Launching Chromashift preview...")}
-                    className="
-                      inline-flex items-center gap-1 px-3 py-1 bg-[#FF499E] border-2 border-black
-                      font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-                      hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
-                      active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all
-                    "
-                  >
-                    <span>Run Lab</span>
-                    <ExternalLink size={12} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Lab Experiment 2 */}
-              <div className="bg-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between border-b-2 border-black pb-1.5">
-                    <span className="font-mono font-bold text-sm uppercase">Synesthesia Audio Deck</span>
-                    <span className="font-mono text-[10px] font-bold bg-[#00F0FF] px-1.5 py-0.5 border border-black">WEB AUDIO</span>
-                  </div>
-                  <p className="text-xs text-gray-800 leading-relaxed font-mono">
-                    Subtractive synthesizer and frequency visualizer generating 8-bit soundscapes directly in the browser.
-                  </p>
-                </div>
-                <div className="pt-4 flex items-center justify-between">
-                  <span className="font-mono text-[10px] font-bold text-gray-600">v2.1 // AudioNodes</span>
-                  <button
-                    type="button"
-                    onClick={() => alert("Launching Audio Deck...")}
-                    className="
-                      inline-flex items-center gap-1 px-3 py-1 bg-[#00F0FF] border-2 border-black
-                      font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-                      hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
-                      active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all
-                    "
-                  >
-                    <span>Run Lab</span>
-                    <ExternalLink size={12} />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <CreativeLabWindow />
         </RetroWindow>
 
-        {/* 3. OFFLINE_MODE.sav (Electric Cyan Header) */}
+        {/* 3. OFFLINE_MODE.sav (Hot Pink Header) */}
         <RetroWindow
           id="offline"
           title="OFFLINE_MODE.sav"
-          headerColor="cyan"
+          headerColor="pink"
+          widthClass="w-full max-w-4xl"
           icon={<span className="text-sm">💾</span>}
           isOpen={windowStates.offline.isOpen}
           isMinimized={windowStates.offline.isMinimized}
