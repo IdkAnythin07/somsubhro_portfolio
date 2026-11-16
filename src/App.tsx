@@ -1,388 +1,343 @@
 import React, { useState } from 'react';
 import { RetroWindow } from './components/RetroWindow';
-import { ExternalLink, Github, Mail, FileText, Send, Sparkles, RefreshCw } from 'lucide-react';
+import { TopStatusBar } from './components/navigation/TopStatusBar';
+import { BottomDock, WindowDockState } from './components/navigation/BottomDock';
+import {
+  ExternalLink,
+  Github,
+  Mail,
+  FileText,
+  Sparkles,
+  Palette,
+  Terminal,
+  Gamepad2,
+  HardDrive,
+  Cpu,
+  Layers,
+  ArrowUpRight,
+  Code2,
+} from 'lucide-react';
 
 export const App: React.FC = () => {
-  // Track open state for the 3 demo windows so users can restore them after closing
-  const [openWindows, setOpenWindows] = useState({
-    about: true,
-    projects: true,
-    contact: true,
+  // Controlled UI states for all three portfolio windows
+  const [windowStates, setWindowStates] = useState<Record<'about' | 'lab' | 'offline', WindowDockState>>({
+    about: { isOpen: true, isMinimized: false, isMaximized: false },
+    lab: { isOpen: true, isMinimized: false, isMaximized: false },
+    offline: { isOpen: true, isMinimized: false, isMaximized: false },
   });
 
-  const [messageSent, setMessageSent] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [activeWindow, setActiveWindow] = useState<'about' | 'lab' | 'offline'>('about');
+  const [offlineSecret, setOfflineSecret] = useState<string>('');
 
-  const restoreAll = () => {
-    setOpenWindows({ about: true, projects: true, contact: true });
+  // Smoothly restore (if closed/minimized) and scroll into view
+  const handleRestoreAndScroll = (key: 'about' | 'lab' | 'offline') => {
+    setActiveWindow(key);
+    setWindowStates((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        isOpen: true,
+        isMinimized: false,
+      },
+    }));
+
+    // Wait for state render (in case window was unmounted), then scroll smoothly
+    setTimeout(() => {
+      const el = document.getElementById(key);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 60);
+  };
+
+  const updateWindowState = (key: 'about' | 'lab' | 'offline', updates: Partial<WindowDockState>) => {
+    setWindowStates((prev) => ({
+      ...prev,
+      [key]: { ...prev[key], ...updates },
+    }));
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#F4F4F0] bg-grid-canvas text-black flex flex-col font-sans">
-      {/* Top OS Status Bar */}
-      <header className="sticky top-0 z-50 bg-white border-b-[3px] border-black px-4 py-2.5 flex items-center justify-between shadow-[0_2px_0px_0px_rgba(0,0,0,1)]">
-        <div className="flex items-center gap-3">
-          <div className="bg-[#FFE600] border-2 border-black px-2.5 py-1 font-mono font-bold text-xs shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-            PORTFOLIO.OS
-          </div>
-          <span className="hidden sm:inline font-mono text-xs font-semibold text-gray-700">
-            Classic OS Frame // Desktop Workspace
-          </span>
-        </div>
+    <div className="min-h-screen w-full bg-[#F4F4F0] bg-grid-canvas text-black flex flex-col font-sans pb-28">
+      {/* Neobrutalist OS Top Status Bar */}
+      <TopStatusBar
+        onNavigateTo={handleRestoreAndScroll}
+        activeWindowId={activeWindow}
+      />
 
-        {/* Restore Closed Windows Bar */}
-        <div className="flex items-center gap-2">
-          {(!openWindows.about || !openWindows.projects || !openWindows.contact) && (
-            <button
-              onClick={restoreAll}
-              className="
-                flex items-center gap-1.5 px-3 py-1 bg-[#FFE600] border-2 border-black
-                font-mono font-bold text-xs uppercase
-                shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-                hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
-                active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
-                transition-all duration-75 cursor-pointer
-              "
-            >
-              <RefreshCw size={12} className="stroke-[3]" />
-              <span>Restore Closed Windows</span>
-            </button>
-          )}
-
-          <div className="bg-black text-[#FFE600] px-2.5 py-1 border-2 border-black font-mono text-xs font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-            {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content Workspace */}
-      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 md:p-8 space-y-8 flex flex-col items-center">
+      {/* Main Workspace */}
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 space-y-10 flex flex-col items-center">
         
-        {/* Intro Guide Pill */}
-        <div className="w-full max-w-2xl bg-white border-[3px] border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-2 font-mono text-xs font-bold">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#23F365] border border-black inline-block" />
-            <span>Interactive Controls:</span>
-            <span className="text-gray-600 font-normal">
-              Click <b className="text-black font-mono">_</b> to collapse to title bar, <b className="text-black font-mono">□</b> to expand full width, <b className="text-black font-mono">×</b> to close.
-            </span>
+        {/* Intro System Banner */}
+        <div className="w-full max-w-3xl bg-white border-[3px] border-black p-4 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 select-none">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl sm:text-3xl">💻</span>
+            <div>
+              <div className="font-mono text-xs font-black tracking-wide uppercase flex items-center gap-2">
+                <span>DESKTOP RUNTIME ACTIVE</span>
+                <span className="w-2 h-2 rounded-full bg-[#23F365] border border-black inline-block animate-pulse" />
+              </div>
+              <p className="font-mono text-xs text-gray-700 mt-0.5">
+                Click controls on any window: <b className="text-black">_</b> collapse, <b className="text-black">□</b> full width, <b className="text-black">×</b> close.
+              </p>
+            </div>
+          </div>
+          <div className="font-mono text-[11px] font-bold bg-[#F4F4F0] px-2.5 py-1 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            RESTORE ANYTIME VIA DOCK ↓
           </div>
         </div>
 
-        {/* WINDOW 1: Acid Yellow Header ("ABOUT_ME.exe") */}
-        {openWindows.about && (
-          <RetroWindow
-            title="ABOUT_ME.exe"
-            headerColor="yellow"
-            onClose={() => setOpenWindows((prev) => ({ ...prev, about: false }))}
-          >
-            <div className="space-y-5">
-              {/* Profile Card with tactile hover */}
-              <div className="bg-white border-[3px] border-black p-4 sm:p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-[#FFE600] border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-mono font-black text-2xl select-none">
-                    ⚡
-                  </div>
-                  <div>
-                    <h2 className="font-display font-bold text-xl sm:text-2xl uppercase tracking-tight text-black">
-                      Software Engineer
-                    </h2>
-                    <p className="font-mono text-xs sm:text-sm text-gray-700 font-semibold">
-                      Full-Stack Web Architect & Interface Designer
-                    </p>
-                  </div>
+        {/* 1. ABOUT_ME.exe (Acid Yellow Header) */}
+        <RetroWindow
+          id="about"
+          title="ABOUT_ME.exe"
+          headerColor="yellow"
+          icon={<span className="text-sm">⚡</span>}
+          isOpen={windowStates.about.isOpen}
+          isMinimized={windowStates.about.isMinimized}
+          isMaximized={windowStates.about.isMaximized}
+          onOpenChange={(open) => updateWindowState('about', { isOpen: open })}
+          onMinimizeChange={(min) => updateWindowState('about', { isMinimized: min })}
+          onMaximizeChange={(max) => updateWindowState('about', { isMaximized: max })}
+          onClose={() => updateWindowState('about', { isOpen: false })}
+        >
+          <div className="space-y-6">
+            {/* Profile Card with tactile hover */}
+            <div className="bg-white border-[3px] border-black p-4 sm:p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-[#FFE600] border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-mono font-black text-2xl select-none">
+                  ⚡
                 </div>
-
-                {/* Tactile Button */}
-                <button
-                  type="button"
-                  onClick={() => alert('Download CV triggered!')}
-                  className="
-                    inline-flex items-center gap-2 px-4 py-2
-                    bg-[#FFE600] text-black
-                    border-[3px] border-black
-                    font-mono font-bold text-xs uppercase
-                    shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-                    hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]
-                    active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-                    transition-all duration-75 cursor-pointer
-                  "
-                >
-                  <FileText size={14} />
-                  <span>Download CV</span>
-                </button>
-              </div>
-
-              {/* Bio Description */}
-              <p className="text-sm leading-relaxed font-medium text-gray-900">
-                Specialized in building robust, performant web applications with clean component architecture, snappy micro-interactions, and high-contrast typography.
-              </p>
-
-              {/* Tactile Interactive Stat Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {[
-                  { label: 'EXPERIENCE', val: '5+ YRS', color: 'bg-white' },
-                  { label: 'PROJECTS', val: '30+ APPS', color: 'bg-[#FFE600]' },
-                  { label: 'TECH STACK', val: 'REACT + TS', color: 'bg-[#00F0FF]' },
-                  { label: 'STATUS', val: 'AVAILABLE', color: 'bg-[#23F365]' },
-                ].map((stat) => (
-                  <div
-                    key={stat.label}
-                    className={`
-                      p-3 border-2 border-black
-                      shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
-                      hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]
-                      transition-all duration-100 ${stat.color}
-                    `}
-                  >
-                    <div className="font-mono text-[10px] font-bold text-gray-700">{stat.label}</div>
-                    <div className="font-mono font-bold text-sm sm:text-base text-black mt-0.5">{stat.val}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </RetroWindow>
-        )}
-
-        {/* WINDOW 2: Hot Pink Header ("PROJECTS.app") */}
-        {openWindows.projects && (
-          <RetroWindow
-            title="PROJECTS.app"
-            headerColor="pink"
-            onClose={() => setOpenWindows((prev) => ({ ...prev, projects: false }))}
-          >
-            <div className="space-y-4">
-              <div className="font-mono text-xs font-bold text-gray-700 uppercase tracking-wide">
-                Selected Production Projects & Repositories
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Project Card 1 */}
-                <div className="bg-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between border-b-2 border-black pb-1.5">
-                      <span className="font-mono font-bold text-sm uppercase">Cloud Workspace</span>
-                      <span className="font-mono text-[10px] font-bold bg-[#FFE600] px-1.5 py-0.5 border border-black">2026</span>
-                    </div>
-                    <p className="text-xs text-gray-800 leading-relaxed">
-                      A real-time collaborative workspace with offline-first local cache synchronization and multi-tab state coordination.
-                    </p>
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {['React', 'TypeScript', 'Tailwind'].map((t) => (
-                        <span key={t} className="font-mono text-[10px] font-bold px-1.5 py-0.5 bg-[#F4F4F0] border border-black">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-4 flex items-center justify-end gap-2">
-                    <button
-                      type="button"
-                      className="
-                        inline-flex items-center gap-1 px-3 py-1.5
-                        bg-white text-black border-2 border-black
-                        font-mono font-bold text-xs uppercase
-                        shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-                        hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-                        active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
-                        transition-all duration-75 cursor-pointer
-                      "
-                    >
-                      <Github size={12} />
-                      <span>Code</span>
-                    </button>
-                    <button
-                      type="button"
-                      className="
-                        inline-flex items-center gap-1 px-3 py-1.5
-                        bg-[#FF499E] text-black border-2 border-black
-                        font-mono font-bold text-xs uppercase
-                        shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-                        hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-                        active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
-                        transition-all duration-75 cursor-pointer
-                      "
-                    >
-                      <ExternalLink size={12} />
-                      <span>Demo</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Project Card 2 */}
-                <div className="bg-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between border-b-2 border-black pb-1.5">
-                      <span className="font-mono font-bold text-sm uppercase">Telemetry Engine</span>
-                      <span className="font-mono text-[10px] font-bold bg-[#00F0FF] px-1.5 py-0.5 border border-black">2026</span>
-                    </div>
-                    <p className="text-xs text-gray-800 leading-relaxed">
-                      High-density real-time metrics visualizer handling thousands of data points at 60 FPS using hardware acceleration.
-                    </p>
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {['Next.js', 'Canvas API', 'WebSocket'].map((t) => (
-                        <span key={t} className="font-mono text-[10px] font-bold px-1.5 py-0.5 bg-[#F4F4F0] border border-black">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-4 flex items-center justify-end gap-2">
-                    <button
-                      type="button"
-                      className="
-                        inline-flex items-center gap-1 px-3 py-1.5
-                        bg-white text-black border-2 border-black
-                        font-mono font-bold text-xs uppercase
-                        shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-                        hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-                        active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
-                        transition-all duration-75 cursor-pointer
-                      "
-                    >
-                      <Github size={12} />
-                      <span>Code</span>
-                    </button>
-                    <button
-                      type="button"
-                      className="
-                        inline-flex items-center gap-1 px-3 py-1.5
-                        bg-[#00F0FF] text-black border-2 border-black
-                        font-mono font-bold text-xs uppercase
-                        shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
-                        hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-                        active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
-                        transition-all duration-75 cursor-pointer
-                      "
-                    >
-                      <ExternalLink size={12} />
-                      <span>Demo</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </RetroWindow>
-        )}
-
-        {/* WINDOW 3: Electric Cyan Header ("CONTACT.msg") */}
-        {openWindows.contact && (
-          <RetroWindow
-            title="CONTACT.msg"
-            headerColor="cyan"
-            onClose={() => setOpenWindows((prev) => ({ ...prev, contact: false }))}
-          >
-            <div className="space-y-4">
-              {messageSent ? (
-                <div className="bg-white border-2 border-black p-6 text-center space-y-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                  <div className="w-12 h-12 mx-auto bg-[#23F365] border-2 border-black flex items-center justify-center font-mono font-bold text-xl">
-                    ✓
-                  </div>
-                  <h3 className="font-mono font-bold text-base uppercase">Message Dispatched</h3>
-                  <p className="font-mono text-xs text-gray-700">
-                    Thank you! Your inquiry has been received.
+                <div>
+                  <h2 className="font-display font-bold text-xl sm:text-2xl uppercase tracking-tight text-black">
+                    Somsubhra
+                  </h2>
+                  <p className="font-mono text-xs sm:text-sm text-gray-800 font-bold">
+                    Creative Technologist & Full-Stack Engineer
                   </p>
+                </div>
+              </div>
+
+              {/* Tactile Button */}
+              <button
+                type="button"
+                onClick={() => alert("Resume downloaded: somsubhra_cv_2026.pdf")}
+                className="
+                  inline-flex items-center gap-2 px-4 py-2
+                  bg-[#FFE600] text-black
+                  border-[3px] border-black
+                  font-mono font-bold text-xs uppercase tracking-wider
+                  shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+                  hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]
+                  active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
+                  transition-all duration-75 cursor-pointer
+                "
+              >
+                <FileText size={14} />
+                <span>Download CV</span>
+              </button>
+            </div>
+
+            {/* Bio Description */}
+            <p className="text-sm leading-relaxed font-medium text-gray-900">
+              Building at the intersection of robust web systems, graphic programming, and expressive user experiences. Focused on snappy micro-interactions, high-speed architectures, and unapologetic Neobrutalist design.
+            </p>
+
+            {/* Core Capability Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { title: 'FRONTEND ARCHITECTURE', desc: 'React, TypeScript, Next.js, WebGL & Canvas systems', color: 'bg-white' },
+                { title: 'CREATIVE DESIGN', desc: 'Neobrutalism, motion mechanics, bold identity & design systems', color: 'bg-[#FFE600]' },
+                { title: 'BACKEND & CLOUD', desc: 'Node.js, Go, PostgreSQL, Edge caching & real-time streams', color: 'bg-[#00F0FF]' },
+              ].map((card) => (
+                <div
+                  key={card.title}
+                  className={`
+                    p-3.5 border-2 border-black
+                    shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
+                    hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]
+                    transition-all duration-100 ${card.color}
+                  `}
+                >
+                  <div className="font-mono text-xs font-black uppercase text-black">{card.title}</div>
+                  <div className="font-mono text-[11px] text-gray-800 font-semibold mt-1 leading-normal">{card.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </RetroWindow>
+
+        {/* 2. THE_CREATIVE_LAB.psd (Hot Pink Header) */}
+        <RetroWindow
+          id="lab"
+          title="THE_CREATIVE_LAB.psd"
+          headerColor="pink"
+          icon={<span className="text-sm">🎨</span>}
+          isOpen={windowStates.lab.isOpen}
+          isMinimized={windowStates.lab.isMinimized}
+          isMaximized={windowStates.lab.isMaximized}
+          onOpenChange={(open) => updateWindowState('lab', { isOpen: open })}
+          onMinimizeChange={(min) => updateWindowState('lab', { isMinimized: min })}
+          onMaximizeChange={(max) => updateWindowState('lab', { isMaximized: max })}
+          onClose={() => updateWindowState('lab', { isOpen: false })}
+        >
+          <div className="space-y-5">
+            <div className="flex items-center justify-between border-b-2 border-black pb-2">
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-black flex items-center gap-1.5">
+                <Palette size={14} className="text-[#FF499E]" />
+                Experimental Prototypes & Visual Shaders
+              </span>
+              <span className="font-mono text-[10px] bg-black text-[#FF499E] px-2 py-0.5 border border-black font-extrabold uppercase">
+                4 ARTIFACTS
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Lab Experiment 1 */}
+              <div className="bg-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between border-b-2 border-black pb-1.5">
+                    <span className="font-mono font-bold text-sm uppercase">Chromashift Canvas</span>
+                    <span className="font-mono text-[10px] font-bold bg-[#FFE600] px-1.5 py-0.5 border border-black">GLSL</span>
+                  </div>
+                  <p className="text-xs text-gray-800 leading-relaxed font-mono">
+                    Real-time procedural dithering and CRT chromatic aberration shader running at 60 FPS in WebGL2.
+                  </p>
+                </div>
+                <div className="pt-4 flex items-center justify-between">
+                  <span className="font-mono text-[10px] font-bold text-gray-600">v1.4 // WebGL</span>
                   <button
                     type="button"
-                    onClick={() => {
-                      setMessageSent(false);
-                      setFormData({ name: '', email: '', message: '' });
-                    }}
+                    onClick={() => alert("Launching Chromashift preview...")}
                     className="
-                      px-4 py-2 bg-[#FFE600] border-2 border-black
-                      font-mono font-bold text-xs uppercase
-                      shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
-                      hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]
-                      active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
-                      transition-all duration-75 cursor-pointer
+                      inline-flex items-center gap-1 px-3 py-1 bg-[#FF499E] border-2 border-black
+                      font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
+                      hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
+                      active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all
                     "
                   >
-                    Send Another Message
+                    <span>Run Lab</span>
+                    <ExternalLink size={12} />
                   </button>
                 </div>
-              ) : (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (!formData.name || !formData.email || !formData.message) return;
-                    setMessageSent(true);
-                  }}
-                  className="space-y-3 font-mono"
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase block text-black">
-                        Name <span className="text-[#FF499E]">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="Your Name"
-                        className="w-full bg-white px-3 py-2 border-2 border-black font-mono text-xs focus:outline-none focus:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase block text-black">
-                        Email <span className="text-[#FF499E]">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="email@example.com"
-                        className="w-full bg-white px-3 py-2 border-2 border-black font-mono text-xs focus:outline-none focus:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
-                      />
-                    </div>
-                  </div>
+              </div>
 
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold uppercase block text-black">
-                      Message <span className="text-[#FF499E]">*</span>
-                    </label>
-                    <textarea
-                      rows={3}
-                      required
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Write your note or project inquiry here..."
-                      className="w-full bg-white px-3 py-2 border-2 border-black font-mono text-xs focus:outline-none focus:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all resize-none"
-                    />
+              {/* Lab Experiment 2 */}
+              <div className="bg-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between border-b-2 border-black pb-1.5">
+                    <span className="font-mono font-bold text-sm uppercase">Synesthesia Audio Deck</span>
+                    <span className="font-mono text-[10px] font-bold bg-[#00F0FF] px-1.5 py-0.5 border border-black">WEB AUDIO</span>
                   </div>
-
-                  {/* Tactile Submit Button */}
+                  <p className="text-xs text-gray-800 leading-relaxed font-mono">
+                    Subtractive synthesizer and frequency visualizer generating 8-bit soundscapes directly in the browser.
+                  </p>
+                </div>
+                <div className="pt-4 flex items-center justify-between">
+                  <span className="font-mono text-[10px] font-bold text-gray-600">v2.1 // AudioNodes</span>
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={() => alert("Launching Audio Deck...")}
                     className="
-                      w-full inline-flex items-center justify-center gap-2 px-4 py-2.5
-                      bg-[#FFE600] text-black
-                      border-[3px] border-black
-                      font-mono font-bold text-xs uppercase tracking-wider
-                      shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-                      hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]
-                      active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-                      transition-all duration-75 cursor-pointer
+                      inline-flex items-center gap-1 px-3 py-1 bg-[#00F0FF] border-2 border-black
+                      font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
+                      hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
+                      active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all
                     "
                   >
-                    <Send size={14} />
-                    <span>Send Message</span>
+                    <span>Run Lab</span>
+                    <ExternalLink size={12} />
                   </button>
-                </form>
-              )}
+                </div>
+              </div>
             </div>
-          </RetroWindow>
-        )}
+          </div>
+        </RetroWindow>
+
+        {/* 3. OFFLINE_MODE.sav (Electric Cyan Header) */}
+        <RetroWindow
+          id="offline"
+          title="OFFLINE_MODE.sav"
+          headerColor="cyan"
+          icon={<span className="text-sm">💾</span>}
+          isOpen={windowStates.offline.isOpen}
+          isMinimized={windowStates.offline.isMinimized}
+          isMaximized={windowStates.offline.isMaximized}
+          onOpenChange={(open) => updateWindowState('offline', { isOpen: open })}
+          onMinimizeChange={(min) => updateWindowState('offline', { isMinimized: min })}
+          onMaximizeChange={(max) => updateWindowState('offline', { isMaximized: max })}
+          onClose={() => updateWindowState('offline', { isOpen: false })}
+        >
+          <div className="space-y-5 font-mono">
+            {/* Save State Telemetry Card */}
+            <div className="bg-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-3">
+              <div className="flex items-center justify-between border-b-2 border-black pb-2">
+                <span className="font-bold text-xs uppercase flex items-center gap-2">
+                  <HardDrive size={15} />
+                  LOCAL CACHE & SAVE STATE
+                </span>
+                <span className="text-[10px] bg-[#23F365] text-black font-bold px-2 py-0.5 border border-black">
+                  SYNCED
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                <div className="bg-[#F4F4F0] p-2 border border-black">
+                  <span className="text-[10px] text-gray-600 block">MEMORY STATUS</span>
+                  <span className="font-bold">64KB / 512KB</span>
+                </div>
+                <div className="bg-[#F4F4F0] p-2 border border-black">
+                  <span className="text-[10px] text-gray-600 block">ENCRYPTION</span>
+                  <span className="font-bold">AES-GCM 256</span>
+                </div>
+                <div className="bg-[#F4F4F0] p-2 border border-black">
+                  <span className="text-[10px] text-gray-600 block">LAST SAVE</span>
+                  <span className="font-bold">JUST NOW</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Interactive Terminal Box */}
+            <div className="bg-black text-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-2">
+              <div className="flex items-center justify-between text-xs text-gray-400 pb-1 border-b border-gray-800">
+                <span className="text-[#FFE600] font-bold">guest@somsubhra.os</span>
+                <span className="text-[#00F0FF] text-[10px]">PWA READY</span>
+              </div>
+              <p className="text-xs text-gray-300">
+                This portfolio is cached offline. All styles, fonts, and assets can be accessed without an active internet connection.
+              </p>
+
+              <div className="flex items-center gap-2 pt-2">
+                <span className="text-[#23F365] font-bold text-xs">&gt;</span>
+                <input
+                  type="text"
+                  value={offlineSecret}
+                  onChange={(e) => setOfflineSecret(e.target.value)}
+                  placeholder="Type 'contact' or 'hire'..."
+                  className="flex-1 bg-transparent text-[#FFE600] font-mono text-xs focus:outline-none placeholder-gray-600"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      if (offlineSecret.toLowerCase().includes('contact') || offlineSecret.toLowerCase().includes('hire')) {
+                        alert("Contact dispatch: somsubhra.dev@gmail.com");
+                      } else {
+                        alert(`Command registered: "${offlineSecret}". System nominal.`);
+                      }
+                      setOfflineSecret('');
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </RetroWindow>
 
       </main>
 
-      {/* Footer */}
-      <footer className="border-t-[3px] border-black bg-white p-3 text-center font-mono text-xs text-gray-700">
-        RetroWindow Component // Clean Neobrutalist OS Frame
-      </footer>
+      {/* Neobrutalist Floating Bottom Taskbar / Dock */}
+      <BottomDock
+        windows={windowStates}
+        onRestoreAndScroll={handleRestoreAndScroll}
+      />
     </div>
   );
 };

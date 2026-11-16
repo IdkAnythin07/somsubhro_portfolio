@@ -9,14 +9,28 @@ export interface RetroWindowProps {
   headerColor?: HeaderColor;
   /** Content rendered inside the window body */
   children: React.ReactNode;
+  /** DOM ID for anchor links and smooth scrolling */
+  id?: string;
   /** Optional custom class for the outer window container */
   className?: string;
-  /** Optional default open state (default: true) */
+  /** Optional controlled open state */
+  isOpen?: boolean;
+  /** Optional default open state if uncontrolled */
   defaultOpen?: boolean;
-  /** Optional default minimized state (default: false) */
+  /** Optional callback fired when open state changes */
+  onOpenChange?: (open: boolean) => void;
+  /** Optional controlled minimized state */
+  isMinimized?: boolean;
+  /** Optional default minimized state if uncontrolled */
   defaultMinimized?: boolean;
-  /** Optional default maximized state (default: false) */
+  /** Optional callback fired when minimized state changes */
+  onMinimizeChange?: (minimized: boolean) => void;
+  /** Optional controlled maximized state */
+  isMaximized?: boolean;
+  /** Optional default maximized state if uncontrolled */
   defaultMaximized?: boolean;
+  /** Optional callback fired when maximized state changes */
+  onMaximizeChange?: (maximized: boolean) => void;
   /** Optional callback fired when Close button is clicked */
   onClose?: () => void;
   /** Optional container width class when not maximized (default: "w-full max-w-2xl") */
@@ -29,17 +43,46 @@ export const RetroWindow: React.FC<RetroWindowProps> = ({
   title,
   headerColor = 'yellow',
   children,
+  id,
   className = '',
+  isOpen: controlledIsOpen,
   defaultOpen = true,
+  onOpenChange,
+  isMinimized: controlledIsMinimized,
   defaultMinimized = false,
+  onMinimizeChange,
+  isMaximized: controlledIsMaximized,
   defaultMaximized = false,
+  onMaximizeChange,
   onClose,
-  widthClass = 'w-full max-w-2xl',
+  widthClass = 'w-full max-w-3xl',
   icon,
 }) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-  const [isMinimized, setIsMinimized] = useState(defaultMinimized);
-  const [isMaximized, setIsMaximized] = useState(defaultMaximized);
+  // Support both controlled and uncontrolled states
+  const [internalIsOpen, setInternalIsOpen] = useState(defaultOpen);
+  const [internalIsMinimized, setInternalIsMinimized] = useState(defaultMinimized);
+  const [internalIsMaximized, setInternalIsMaximized] = useState(defaultMaximized);
+
+  const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+  const isMinimized = controlledIsMinimized !== undefined ? controlledIsMinimized : internalIsMinimized;
+  const isMaximized = controlledIsMaximized !== undefined ? controlledIsMaximized : internalIsMaximized;
+
+  const setIsOpen = (next: boolean) => {
+    if (controlledIsOpen === undefined) setInternalIsOpen(next);
+    onOpenChange?.(next);
+  };
+
+  const setIsMinimized = (next: boolean | ((prev: boolean) => boolean)) => {
+    const value = typeof next === 'function' ? next(isMinimized) : next;
+    if (controlledIsMinimized === undefined) setInternalIsMinimized(value);
+    onMinimizeChange?.(value);
+  };
+
+  const setIsMaximized = (next: boolean | ((prev: boolean) => boolean)) => {
+    const value = typeof next === 'function' ? next(isMaximized) : next;
+    if (controlledIsMaximized === undefined) setInternalIsMaximized(value);
+    onMaximizeChange?.(value);
+  };
 
   // If closed, unmount/hide the window
   if (!isOpen) {
@@ -60,7 +103,6 @@ export const RetroWindow: React.FC<RetroWindowProps> = ({
 
   const handleMaximize = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // If minimized, expanding it should also un-minimize
     if (isMinimized) {
       setIsMinimized(false);
     }
@@ -77,11 +119,12 @@ export const RetroWindow: React.FC<RetroWindowProps> = ({
 
   return (
     <div
+      id={id}
       className={`
         bg-white text-black
         border-[3px] border-black
         shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]
-        transition-all duration-150 ease-out
+        transition-all duration-150 ease-out scroll-mt-20
         ${isMaximized ? 'w-full max-w-full' : widthClass}
         ${className}
       `}
@@ -89,14 +132,14 @@ export const RetroWindow: React.FC<RetroWindowProps> = ({
       {/* Title Bar */}
       <div
         className={`
-          flex items-center justify-between px-3 py-2
+          flex items-center justify-between px-3.5 py-2.5
           border-b-[3px] border-black
           select-none
           ${headerBgMap[headerColor]}
         `}
       >
         {/* Left: Monospace filename */}
-        <div className="flex items-center gap-2 overflow-hidden mr-2">
+        <div className="flex items-center gap-2.5 overflow-hidden mr-2">
           {icon && <span className="inline-flex shrink-0 text-base">{icon}</span>}
           <span className="font-mono font-bold text-xs sm:text-sm tracking-wider uppercase truncate text-black">
             {title}
