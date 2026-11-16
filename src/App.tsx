@@ -3,6 +3,8 @@ import { RetroWindow } from './components/RetroWindow';
 import { TopStatusBar } from './components/navigation/TopStatusBar';
 import { BottomDock, WindowDockState } from './components/navigation/BottomDock';
 import { CreativeLabWindow } from './components/windows/CreativeLabWindow';
+import { OfflineModeWindow } from './components/windows/OfflineModeWindow';
+import { Footer } from './components/navigation/Footer';
 import {
   ExternalLink,
   Github,
@@ -28,7 +30,6 @@ export const App: React.FC = () => {
   });
 
   const [activeWindow, setActiveWindow] = useState<'about' | 'lab' | 'offline'>('about');
-  const [offlineSecret, setOfflineSecret] = useState<string>('');
 
   // Smoothly restore (if closed/minimized) and scroll into view
   const handleRestoreAndScroll = (key: 'about' | 'lab' | 'offline') => {
@@ -283,70 +284,13 @@ export const App: React.FC = () => {
           onMaximizeChange={(max) => updateWindowState('offline', { isMaximized: max })}
           onClose={() => updateWindowState('offline', { isOpen: false })}
         >
-          <div className="space-y-5 font-mono">
-            {/* Save State Telemetry Card */}
-            <div className="bg-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-3">
-              <div className="flex items-center justify-between border-b-2 border-black pb-2">
-                <span className="font-bold text-xs uppercase flex items-center gap-2">
-                  <HardDrive size={15} />
-                  LOCAL CACHE & SAVE STATE
-                </span>
-                <span className="text-[10px] bg-[#23F365] text-black font-bold px-2 py-0.5 border border-black">
-                  SYNCED
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                <div className="bg-[#F4F4F0] p-2 border border-black">
-                  <span className="text-[10px] text-gray-600 block">MEMORY STATUS</span>
-                  <span className="font-bold">64KB / 512KB</span>
-                </div>
-                <div className="bg-[#F4F4F0] p-2 border border-black">
-                  <span className="text-[10px] text-gray-600 block">ENCRYPTION</span>
-                  <span className="font-bold">AES-GCM 256</span>
-                </div>
-                <div className="bg-[#F4F4F0] p-2 border border-black">
-                  <span className="text-[10px] text-gray-600 block">LAST SAVE</span>
-                  <span className="font-bold">JUST NOW</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Interactive Terminal Box */}
-            <div className="bg-black text-white border-[3px] border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-2">
-              <div className="flex items-center justify-between text-xs text-gray-400 pb-1 border-b border-gray-800">
-                <span className="text-[#FFE600] font-bold">guest@somsubhra.os</span>
-                <span className="text-[#00F0FF] text-[10px]">PWA READY</span>
-              </div>
-              <p className="text-xs text-gray-300">
-                This portfolio is cached offline. All styles, fonts, and assets can be accessed without an active internet connection.
-              </p>
-
-              <div className="flex items-center gap-2 pt-2">
-                <span className="text-[#23F365] font-bold text-xs">&gt;</span>
-                <input
-                  type="text"
-                  value={offlineSecret}
-                  onChange={(e) => setOfflineSecret(e.target.value)}
-                  placeholder="Type 'contact' or 'hire'..."
-                  className="flex-1 bg-transparent text-[#FFE600] font-mono text-xs focus:outline-none placeholder-gray-600"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      if (offlineSecret.toLowerCase().includes('contact') || offlineSecret.toLowerCase().includes('hire')) {
-                        alert("Contact dispatch: somsubhra.dev@gmail.com");
-                      } else {
-                        alert(`Command registered: "${offlineSecret}". System nominal.`);
-                      }
-                      setOfflineSecret('');
-                    }
-                  }}
-                />
-              </div>
-            </div>
-          </div>
+          <OfflineModeWindow />
         </RetroWindow>
 
       </main>
+
+      {/* Bold Neobrutalist Footer */}
+      <Footer onScrollToTop={() => handleRestoreAndScroll('about')} />
 
       {/* Neobrutalist Floating Bottom Taskbar / Dock */}
       <BottomDock

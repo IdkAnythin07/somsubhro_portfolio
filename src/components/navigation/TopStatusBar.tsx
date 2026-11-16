@@ -48,7 +48,7 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({ onNavigateTo, active
             type="button"
             onClick={() => onNavigateTo('about')}
             className={`
-              px-2 sm:px-2.5 py-1 border-2 border-black font-mono font-bold text-[11px] sm:text-xs uppercase
+              px-2 sm:px-2.5 py-1 border-2 border-black font-mono font-bold text-[10px] sm:text-xs uppercase
               transition-all duration-75 cursor-pointer
               shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
               hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
@@ -60,45 +60,48 @@ export const TopStatusBar: React.FC<TopStatusBarProps> = ({ onNavigateTo, active
               }
             `}
           >
-            ABOUT_ME
+            <span className="sm:hidden">ABOUT</span>
+            <span className="hidden sm:inline">ABOUT_ME</span>
           </button>
 
           <button
             type="button"
             onClick={() => onNavigateTo('lab')}
             className={`
-              px-2 sm:px-2.5 py-1 border-2 border-black font-mono font-bold text-[11px] sm:text-xs uppercase
+              px-2 sm:px-2.5 py-1 border-2 border-black font-mono font-bold text-[10px] sm:text-xs uppercase
               transition-all duration-75 cursor-pointer
               shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
               hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
               active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
               ${
                 activeWindowId === 'lab'
-                  ? 'bg-[#FF499E] text-black font-black'
-                  : 'bg-white hover:bg-[#FF499E] text-black'
+                  ? 'bg-[#00F0FF] text-black font-black'
+                  : 'bg-white hover:bg-[#00F0FF] text-black'
               }
             `}
           >
-            CREATIVE_LAB
+            <span className="sm:hidden">LAB</span>
+            <span className="hidden sm:inline">CREATIVE_LAB</span>
           </button>
 
           <button
             type="button"
             onClick={() => onNavigateTo('offline')}
             className={`
-              px-2 sm:px-2.5 py-1 border-2 border-black font-mono font-bold text-[11px] sm:text-xs uppercase
+              px-2 sm:px-2.5 py-1 border-2 border-black font-mono font-bold text-[10px] sm:text-xs uppercase
               transition-all duration-75 cursor-pointer
               shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
               hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
               active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
               ${
                 activeWindowId === 'offline'
-                  ? 'bg-[#00F0FF] text-black font-black'
-                  : 'bg-white hover:bg-[#00F0FF] text-black'
+                  ? 'bg-[#FF499E] text-black font-black'
+                  : 'bg-white hover:bg-[#FF499E] text-black'
               }
             `}
           >
-            OFFLINE_MODE
+            <span className="sm:hidden">OFFLINE</span>
+            <span className="hidden sm:inline">OFFLINE_MODE</span>
           </button>
         </nav>
 
