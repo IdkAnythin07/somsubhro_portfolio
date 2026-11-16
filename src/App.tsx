@@ -69,7 +69,7 @@ export const App: React.FC = () => {
 
       {/* Main Workspace */}
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 space-y-10 flex flex-col items-center">
-        
+
         {/* Intro System Banner */}
         <div className="w-full max-w-3xl bg-white border-[3px] border-black p-4 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 select-none">
           <div className="flex items-center gap-3">
@@ -106,11 +106,11 @@ export const App: React.FC = () => {
         >
           {/* Two-column Hero Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-            
+
             {/* Left Column: High-contrast framed visual card / avatar placeholder */}
             <div className="lg:col-span-5 w-full flex flex-col items-center">
               <div className="w-full bg-white border-[3px] border-black p-3.5 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] transition-all duration-100 flex flex-col gap-3">
-                
+
                 {/* Visual Viewfinder Header with Filmstrip metadata */}
                 <div className="flex items-center justify-between border-b-2 border-black pb-1.5 font-mono text-[10px] font-bold text-gray-700">
                   <span className="flex items-center gap-1">
@@ -122,7 +122,7 @@ export const App: React.FC = () => {
 
                 {/* Framed Graphic Artwork / Visual Placeholder with Viewfinder Corners */}
                 <div className="relative w-full aspect-[4/5] bg-[#F4F4F0] border-2 border-black overflow-hidden flex flex-col items-center justify-center p-4 select-none">
-                  
+
                   {/* Subtle Grid Canvas Background inside frame */}
                   <div className="absolute inset-0 bg-grid-canvas opacity-70 pointer-events-none" />
 
@@ -182,7 +182,7 @@ export const App: React.FC = () => {
 
             {/* Right Column: Name, Highlight Badge, Bio, and Tactile CTA */}
             <div className="lg:col-span-7 flex flex-col justify-between space-y-5">
-              
+
               {/* Header Title Section */}
               <div className="space-y-2.5">
                 {/* Oversized Bold Display Name */}

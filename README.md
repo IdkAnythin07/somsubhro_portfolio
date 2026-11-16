@@ -1,77 +1,76 @@
-# Neobrutalism Desktop OS Portfolio
+# somsubhro_portfolio
 
-A modern React + Tailwind CSS personal portfolio web application built with a bold, high-contrast **Neobrutalism Desktop Aesthetic** (inspired by the iconic 21st.dev `ekmas` template).
+A high-contrast **Neobrutalism Desktop OS Portfolio** built with React, TypeScript, and Tailwind CSS for **Somsubhra Chakraborty** (Animator, Visual Designer & Storyteller).
 
 ---
 
 ## 🎨 Theme & Aesthetic Configuration
 
-### 1. Canvas & Ink
 - **Canvas Grid Background**: `#F4F4F0` with subtle geometric grid lines (`.bg-grid-canvas`).
-- **Stark Black Ink**: `#000000` for all text, borders, and hard shadows.
-
-### 2. Vibrant Accent Palette
-- **Acid Yellow**: `#FFE600` (`bg-brutal-yellow`, `hover:bg-[#FFF04D]`)
-- **Hot Pink**: `#FF499E` (`bg-brutal-pink`, `hover:bg-[#FF6DB2]`)
-- **Electric Cyan**: `#00F0FF` (`bg-brutal-cyan`, `hover:bg-[#4DF4FF]`)
-- **Cyber Lime**: `#23F365` (`bg-brutal-lime`)
-- **Neon Purple**: `#A055FF` (`bg-brutal-purple`)
-
-### 3. Typography
-- **Display Typography**: `Space Grotesk` (weights 400-700) & `Archivo Black` for bold retro headers.
-- **Monospace Typography**: `JetBrains Mono` for window tags, terminal shell, and badges.
-
-### 4. Neobrutalist Borders & Hard Drop Shadows
-- **Solid Borders**: `border-[3px] border-black` (`.border-brutal`)
-- **Hard Offset Shadows**:
-  - Standard Window / Card: `shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]` (`.shadow-brutal`)
-  - Compact / Badge: `shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]` (`.shadow-brutal-sm`)
-  - Elevated / Focus: `shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]` (`.shadow-brutal-lg`)
-- **Tactile Button Micro-Interactions**:
-  - Hover: `hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]`
-  - Active Press: `active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]`
+- **Stark Black Ink**: `#000000` for all text, 3px solid borders, and hard offset drop shadows.
+- **Vibrant Accent Colors**:
+  - **Acid Yellow**: `#FFE600`
+  - **Hot Pink**: `#FF499E`
+  - **Electric Cyan**: `#00F0FF`
+  - **Cyber Lime**: `#23F365`
+- **Typography**:
+  - Display: `Space Grotesk` & `Archivo Black`
+  - Monospace: `JetBrains Mono`
 
 ---
 
-## 🖥️ Desktop OS Architecture
+## 🖥️ Portfolio Architecture
 
-- **Top OS System Bar (`TopBar.tsx`)**:
-  - Retro OS brand badge (`⚡ DEV.OS`) with launcher dropdown menu
-  - Real-time digital clock with seconds ticking
-  - Live system status badge (`ONLINE // AVAILABLE FOR HIRE`)
-  - Web Audio 8-bit sound effects toggle (with retro synthesizer beeps)
-  - Battery & Wi-Fi system telemetry
+1. **Top Status Bar (`TopStatusBar.tsx`)**:
+   - Bold Brand Badge: `SOMSUBHRA.OS`
+   - Live Status Pill: `● AVAILABLE FOR CREATIVE WORK`
+   - Quick anchor links (`ABOUT_ME`, `CREATIVE_LAB`, `OFFLINE_MODE`)
+   - Digital system clock
 
-- **Interactive Desktop Canvas (`DesktopCanvas.tsx`)**:
-  - Desktop shortcut icons with bold black borders and color tiles (`bio.exe`, `projects.app`, `skills.sys`, `terminal.sh`, `mail.exe`, `audio.wav`)
-  - Drag-and-drop window management with dynamic z-index layering
+2. **Window 1 — `ABOUT_ME.exe` (Acid Yellow `#FFE600`)**:
+   - High-contrast visual card with stylized `FRAME 01 / 24 FPS` animation viewfinder badge.
+   - Oversized display name: **Somsubhra Chakraborty**.
+   - Hot pink highlight badge: **Animator, Visual Designer & Storyteller**.
+   - Personal bio and tactile primary CTA button (`EXPLORE MY CRAFT ↓`).
 
-- **Neobrutalism Window Manager (`Window.tsx`)**:
-  - Title bar with file path tag and traffic-light controls (Hot Pink close, Acid Yellow minimize, Electric Cyan maximize)
-  - Draggable handle and smooth maximize/restore toggling
+3. **Window 2 — `THE_CREATIVE_LAB.psd` (Electric Cyan `#00F0FF`)**:
+   - Photoshop-inspired document context bar and tool shortcuts (`[V]`, `[M]`, `[L]`, `[B]`, `[P]`, `[T]`).
+   - Prominent callout banner: *"Building emotional depth and character movement through every frame."*
+   - Interactive Bento Grid showcasing the 6 daily creative skills:
+     - Adobe Photoshop
+     - Adobe Illustrator
+     - Animation
+     - Visual Storytelling
+     - Poster Design
+     - Textures & Compositions
+   - Interactive layer inspector deep-dive panel.
 
-- **Apps & Windows Included**:
-  1. `AboutWindow.tsx` (`bio.exe`): Bio, metrics, stats, resume download, status badges.
-  2. `ProjectsWindow.tsx` (`projects.app`): Filterable repertoire with live demo & github links.
-  3. `SkillsWindow.tsx` (`skills.sys`): Continuous marquee ticker, progress bars, and architecture philosophy.
-  4. `TerminalWindow.tsx` (`terminal.sh`): Interactive CLI with working commands (`help`, `about`, `projects`, `skills`, `contact`, `theme`, `date`, `clear`, `sudo`).
-  5. `ContactWindow.tsx` (`mail.exe`): Encoded transmission dispatch form with direct social networks.
-  6. `AudioPlayerWindow.tsx` (`audio.wav`): Retro stereo cassette player with animated equalizer bars.
+4. **Window 3 — `OFFLINE_MODE.sav` (Hot Pink `#FF499E`)**:
+   - Quote banner: *"Who you are as a person matters just as much as the work you create."*
+   - Four distinct Neobrutalist sub-cards:
+     1. **Strategy & Focus**: Playing Carrom and honing patience, precision, and angles.
+     2. **Gaming Worlds**: Retro game cartridge card (*Genshin Impact*, *Neverness to Everness*, *Free Fire*, *Call of Duty: Mobile*).
+     3. **Anime Inspiration**: Expressive storytelling, camera shifts, and kinetic *sakuga* motion.
+     4. **Vibe & Community**: Kind, approachable, mentoring, and helping with Adobe design troubleshooting.
 
-- **Floating Bottom Dock (`Dock.tsx`)**:
-  - Centered floating dock with active window indicator lights and tooltips.
+5. **Floating Bottom Dock (`BottomDock.tsx`)**:
+   - Persistent dock pills for `ABOUT_ME.exe`, `THE_CREATIVE_LAB.psd`, and `OFFLINE_MODE.sav`.
+   - Smooth restore & scroll mechanics: clicking any pill instantly un-minimizes/reopens and scrolls to that window.
+
+6. **Footer (`Footer.tsx`)**:
+   - Bold tactile social & contact links (Email, LinkedIn, Instagram, ArtStation, GitHub) and back-to-top trigger.
 
 ---
 
-## 🚀 Running the Project
+## 🚀 Development & Build
 
 ```bash
 # Start local development server
 npm run dev
 
-# Build for production
+# Compile TypeScript and build for production
 npm run build
 
-# Preview production build
+# Preview production bundle
 npm run preview
 ```
